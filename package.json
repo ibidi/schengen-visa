@@ -1,0 +1,61 @@
+{
+  "name": "schengen-randevu-checker",
+  "version": "2.0.0",
+  "description": "Modern TypeScript library for checking Schengen visa appointment availability across 17+ countries. Educational and informational purposes only.",
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
+  "scripts": {
+    "build": "tsc",
+    "dev": "tsc --watch",
+    "prepublishOnly": "npm run build",
+    "test": "ts-node test-module.ts"
+  },
+  "keywords": [
+    "schengen",
+    "visa",
+    "appointment",
+    "vize",
+    "randevu",
+    "turkey",
+    "turkiye",
+    "konsolosluk",
+    "embassy",
+    "vfs-global",
+    "bls",
+    "typescript",
+    "checker",
+    "availability",
+    "booking",
+    "france",
+    "germany",
+    "netherlands",
+    "spain",
+    "italy"
+  ],
+  "author": "İhsan Baki Doğan <info@ihsanbakidogan.com>",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/ibidi/schengen-randevu-checker.git"
+  },
+  "bugs": {
+    "url": "https://github.com/ibidi/schengen-randevu-checker/issues"
+  },
+  "homepage": "https://github.com/ibidi/schengen-randevu-checker#readme",
+  "engines": {
+    "node": ">=18.0.0"
+  },
+  "files": [
+    "dist",
+    "README.md",
+    "LICENSE"
+  ],
+  "devDependencies": {
+    "@types/node": "^20.0.0",
+    "typescript": "^5.3.0",
+    "ts-node": "^10.9.0"
+  },
+  "dependencies": {
+    "axios": "^1.6.0"
+  }
+}

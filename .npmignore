@@ -1,0 +1,22 @@
+# Source files
+src/
+tsconfig.json
+
+# Examples and tests
+test-module.ts
+example.js
+
+# Development
+node_modules/
+*.log
+.DS_Store
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# Git
+.git/
+.gitignore
