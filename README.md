@@ -460,6 +460,58 @@ import { SchengenChecker } from 'schengen-randevu-checker';
 const checker = new SchengenChecker({ sehir: 'ankara' });
 ```
 
+## 🔧 Troubleshooting
+
+### Germany (Almanya) Timeout Issues
+
+If you're experiencing timeout errors with Germany:
+
+```typescript
+// Result: { durum: 'timeout', mesaj: 'Site yanıt vermiyor (timeout)' }
+```
+
+**Possible Causes:**
+1. **Bot Protection** - German embassy website uses anti-bot measures
+2. **Network Environment** - WSL, Docker, or restrictive networks may block requests
+3. **Slow Response** - Government sites can be slow (we use 30s timeout)
+
+**Solutions:**
+
+```typescript
+// 1. Increase timeout (if needed)
+const checker = new SchengenChecker({
+  // Note: Timeout is already 30s by default
+  cache: { 
+    enabled: true,
+    ttl: 10 * 60 * 1000 // Cache for 10 minutes
+  }
+});
+
+// 2. Use cache to reduce requests
+const result = await checker.musaitRandevuKontrol('almanya');
+// Second call will be instant from cache
+
+// 3. Check if site is accessible
+const info = checker.vizeMerkeziBilgisi('almanya');
+console.log('Try accessing:', info.url);
+// Open in browser to verify
+```
+
+**Alternative Approaches:**
+- Use the official [iDATA website](https://idata.com.tr) directly
+- Check from a different network/VPN
+- Use browser automation tools (Puppeteer/Playwright) for better bot evasion
+
+### Other Common Issues
+
+**403 Forbidden Errors:**
+- Some sites block automated requests
+- Try with different User-Agent or from browser
+
+**Rate Limiting:**
+- Use built-in rate limiting: `rateLimit: 3000` (3 seconds between requests)
+- Enable caching to reduce API calls
+
 ## 🤝 Contributing
 
 Contributions are welcome! Please read our contributing guidelines.

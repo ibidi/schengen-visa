@@ -127,16 +127,35 @@ export class SchengenChecker {
     vizeTipi: string,
     vizeMerkezi: VizeMerkezi
   ): Promise<RandevuKontrolSonuc> {
+    // Build URL with city parameters if available
+    let url = vizeMerkezi.url;
+    
+    // Debug: Check if cityParams exists
+    if (vizeMerkezi.cityParams) {
+      const cityCode = vizeMerkezi.cityParams[sehir.toLowerCase()];
+      if (cityCode) {
+        url = `${url}?locationCode=${cityCode}&request_locale=tr`;
+      }
+    }
+
     const headers = {
-      'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36',
-      'Accept': 'text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8',
-      'Accept-Language': 'tr-TR,tr;q=0.9,en-US;q=0.8,en;q=0.7'
+      'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36',
+      'Accept': 'text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,image/apng,*/*;q=0.8',
+      'Accept-Language': 'tr-TR,tr;q=0.9,en-US;q=0.8,en;q=0.7',
+      'Accept-Encoding': 'gzip, deflate, br',
+      'Connection': 'keep-alive',
+      'Upgrade-Insecure-Requests': '1',
+      'Sec-Fetch-Dest': 'document',
+      'Sec-Fetch-Mode': 'navigate',
+      'Sec-Fetch-Site': 'none',
+      'Sec-Fetch-User': '?1',
+      'Cache-Control': 'max-age=0'
     };
 
     try {
-      const response = await axios.get(vizeMerkezi.url, {
+      const response = await axios.get(url, {
         headers,
-        timeout: 10000,
+        timeout: 30000, // Increased to 30 seconds for slow government sites
         maxRedirects: 5,
         validateStatus: (status) => status < 500
       });
@@ -164,7 +183,7 @@ export class SchengenChecker {
           vizeTipi,
           durum,
           mesaj,
-          url: vizeMerkezi.url,
+          url, // Use the dynamically built URL
           siteErisilebilir: true,
           httpDurum: response.status,
           kontrolTarihi: new Date(),
@@ -177,21 +196,22 @@ export class SchengenChecker {
         sehir,
         durum: 'hata',
         mesaj: `Site erişim sorunu (HTTP ${response.status})`,
-        url: vizeMerkezi.url,
+        url,
         siteErisilebilir: false,
         httpDurum: response.status,
         kontrolTarihi: new Date()
       };
     } catch (error: any) {
-      if (error.code === 'ECONNABORTED') {
+      if (error.code === 'ECONNABORTED' || error.code === 'ETIMEDOUT') {
         return {
           ulke,
           sehir,
           durum: 'timeout',
-          mesaj: 'Site yanıt vermiyor (timeout)',
-          url: vizeMerkezi.url,
+          mesaj: 'Site yanıt vermiyor (timeout - 30s). Resmi siteyi tarayıcıdan kontrol edin.',
+          url,
           siteErisilebilir: false,
-          kontrolTarihi: new Date()
+          kontrolTarihi: new Date(),
+          not: 'Bazı resmi siteler bot koruması kullanır ve otomatik kontrol engellenebilir.'
         };
       }
       throw error;

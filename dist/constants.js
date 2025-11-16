@@ -185,10 +185,15 @@ exports.VIZE_MERKEZLERI = {
         telefonlar: { ankara: '+90 312 409 1800', istanbul: '+90 212 393 2121' }
     },
     almanya: {
-        url: 'https://service2.diplo.de/rktermin/extern/choose_categoryList.do?locationCode=anka&request_locale=tr',
+        url: 'https://service2.diplo.de/rktermin/extern/choose_categoryList.do',
         tip: 'konsolosluk',
         sehirler: ['ankara', 'istanbul', 'izmir'],
-        telefonlar: { ankara: '+90 312 455 5100', istanbul: '+90 212 334 6100' }
+        telefonlar: { ankara: '+90 312 455 5100', istanbul: '+90 212 334 6100' },
+        cityParams: {
+            ankara: 'anka',
+            istanbul: 'ista',
+            izmir: 'izmi'
+        }
     },
     ispanya: {
         url: 'https://blsspain-turkey.com/ankara/appointment.php',

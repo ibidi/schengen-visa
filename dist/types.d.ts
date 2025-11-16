@@ -3,6 +3,7 @@ export interface VizeMerkezi {
     tip: 'vfs-global' | 'bls-international' | 'konsolosluk';
     sehirler: string[];
     telefonlar: Record<string, string>;
+    cityParams?: Record<string, string>;
 }
 export interface CountryConfig {
     id: string;

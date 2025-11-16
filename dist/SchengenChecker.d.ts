@@ -41,6 +41,7 @@ export declare class SchengenChecker {
         tip: "vfs-global" | "bls-international" | "konsolosluk";
         sehirler: string[];
         telefonlar: Record<string, string>;
+        cityParams?: Record<string, string>;
         ulke: string;
     }[];
     /**
